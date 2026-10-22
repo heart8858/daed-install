@@ -37,3 +37,13 @@ curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/managem
 ```
 
 立即定位到吸顶栏下方，显示明确提示及高亮，后台延迟更新保留卡片。仍只更新管理组件，原install.sh、management-9.sh与历史资产保留。
+
+## 节点观测 management-11（已有10x6.2）
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/management-11.sh -o /tmp/daed-ui.sh && sh /tmp/daed-ui.sh
+```
+
+保留节点延迟历史，在卡片操作区下显示IP评分；独立组件通过各节点实际IPv4出口采样，成功结果12小时缓存，失败显示暂不可查并保留旧值。评分不参与路由和健康判定。重启后结果保留，下次有效登录打开节点页恢复后台采集。延迟历史保存在当前浏览器，清理浏览器存储会清除。
+
+仅支持固定10x6.2；更新管理台与独立采集组件，不替换核心、不切换节点或应用待应用配置。两端私有发布附件均下载校验，安装失败自动回退。保留所有旧入口和资产。
