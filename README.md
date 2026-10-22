@@ -8,7 +8,7 @@ curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/install
 
 随后选择 **Gitee（默认）或 GitHub**，输入对应私有仓库的访问令牌。输入不会显示，不需要手动建立令牌文件；本轮临时令牌在退出时清理。请不要把令牌发到公开仓库。
 
-当前固定版本：安装器 **10x4-install.1（预发布）**，核心 **custom-kern-takeover-10x4**。启动脚本校验固定入口 SHA256，再由入口校验安装器与安装包。核心和安装包仍在原私有仓库，本公开仓库只包含 `install.sh` 和本说明，不包含核心、订阅、账号或令牌。
+当前固定版本：安装器 **10x4-install.1（预发布）**，核心 **custom-kern-takeover-10x4**。启动脚本校验固定入口 SHA256，再由入口校验安装器与安装包。核心和安装包仍在原私有仓库，本公开仓库只包含启动脚本和本说明，不包含核心、订阅、账号或令牌。
 
 新装后读取 `/etc/daed/seed/INITIAL-ADMIN.txt`，打开 `http://<路由器地址>:2023/`，导入订阅、配置分组绑定，并在面板启动。确认可用后执行：
 
@@ -21,3 +21,11 @@ curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/install
 仅在具备匹配系统依赖的 OpenWrt 6.12.92 x86_64 上验证，不宣称兼容所有裸镜像或修复全部 IPv6 首屏问题。完整说明、前置条件与原始验证记录在 [原项目](https://github.com/heart8858/daed-modify/blob/main/docs/INSTALL-10x4.md)（需要仓库权限）。
 
 若 raw 域名不可达，可在本仓库下载 `install.sh`，上传到目标机后运行 `sh /tmp/install.sh`。自动化可以使用 `--provider gitee|github --token-stdin`，或 `DAED_TOKEN_FILE`，避免将令牌写入命令参数。
+
+## 已有10x6.2：单独更新管理面板
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/management-9.sh -o /tmp/daed-ui.sh && sh /tmp/daed-ui.sh
+```
+
+management-9新增当前节点定位/强调、吸顶筛选与近几秒核心流量平均。仅接受固定10x6.2核心；不升级核心，不修改订阅、节点、DNS或网络，不应用待应用配置。安装程序与包从所选私有仓库获取并校验；先备份，失败自动回退。原install.sh及其10x4固定资产保留。
