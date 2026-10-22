@@ -29,3 +29,11 @@ curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/managem
 ```
 
 management-9新增当前节点定位/强调、吸顶筛选与近几秒核心流量平均。仅接受固定10x6.2核心；不升级核心，不修改订阅、节点、DNS或网络，不应用待应用配置。安装程序与包从所选私有仓库获取并校验；先备份，失败自动回退。原install.sh及其10x4固定资产保留。
+
+## 定位修正版 management-10（已有10x6.2）
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/management-10.sh -o /tmp/daed-ui.sh && sh /tmp/daed-ui.sh
+```
+
+立即定位到吸顶栏下方，显示明确提示及高亮，后台延迟更新保留卡片。仍只更新管理组件，原install.sh、management-9.sh与历史资产保留。
