@@ -1,49 +1,74 @@
 # daed 安装入口
 
-在目标 OpenWrt / Kwrt x86_64 的 root SSH 终端复制这一条：
+在目标 OpenWrt / Kwrt x86_64 的 root SSH 终端执行：
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/install.sh -o /tmp/daed-install.sh && sh /tmp/daed-install.sh
 ```
 
-随后选择 **Gitee（默认）或 GitHub**，输入对应私有仓库的访问令牌。输入不会显示，不需要手动建立令牌文件；本轮临时令牌在退出时清理。请不要把令牌发到公开仓库。
+随后选择 **Gitee（默认）或 GitHub**，输入对应私有仓库的访问令牌。令牌输入不显示；临时令牌只用于本次下载，退出时清理。请不要把令牌写进公开仓库或命令参数。自动化可以使用 `--provider gitee|github --token-stdin`，或通过 `DAED_TOKEN_FILE` 指定令牌文件。
 
-当前固定版本：安装器 **10x4-install.1（预发布）**，核心 **custom-kern-takeover-10x4**。启动脚本校验固定入口 SHA256，再由入口校验安装器与安装包。核心和安装包仍在原私有仓库，本公开仓库只包含启动脚本和本说明，不包含核心、订阅、账号或令牌。
+## 当前固定版本
 
-新装后读取 `/etc/daed/seed/INITIAL-ADMIN.txt`，打开 `http://<路由器地址>:2023/`，导入订阅、配置分组绑定，并在面板启动。确认可用后执行：
+- 核心：`10x6.5-install.1` / `custom-kern-takeover-10x6.5`
+- 管理台：`management-13`（console `d0c9ce62…`，observer `b52d73e2…`）
+- 离线包 SHA256：`30d1f73c6ce2dc8e7e99025545f8dd7e79686d50b79f487bc5580f7509889f85`
+- 大小：62,586,316 B；根分区需约 650 MB 可用空间
+
+启动器先校验归档 SHA256，再解压到 `/root` 并运行其中的离线安装器；安装器会再次校验包内 `SHA256SUMS`。核心和管理台分两阶段安装：先核心，后面板；任一阶段失败由安装器事务恢复，不会把归档内容直接覆盖到运行中的数据库。
+
+新装和已有安装走同一入口：已有安装保留用户数据库、订阅、节点和配置，仅升级程序；不修改 WAN、mwan3 或分流策略。核心升级要求已安装核心在允许列表内；无法识别的核心会拒绝升级并要求先导出/检查。
+
+## 安装后
+
+面板默认只监听 `127.0.0.1:2024`（安全默认，不对 LAN 开放）。在管理电脑上建立 SSH 隧道：
+
+```sh
+ssh -N -L 2024:127.0.0.1:2024 root@<路由器 LAN IP>
+```
+
+然后打开 `http://127.0.0.1:2024/`。新装初始账号在路由器上读取：
+
+```sh
+cat /etc/daed/seed/INITIAL-ADMIN.txt
+```
+
+导入订阅、配置分组并启动后，确认可用再激活核心发行版：
 
 ```sh
 /usr/libexec/daed-release/daed-install activate --yes --confirm
 ```
 
-已有安装保留用户数据库；安装器在停服前建立恢复守卫，并保留一致备份。备份在 `/root/daed-releases/transactions/`；不要删 WAL/SHM 或拿历史整库覆盖当前数据库。
-
-仅在具备匹配系统依赖的 OpenWrt 6.12.92 x86_64 上验证，不宣称兼容所有裸镜像或修复全部 IPv6 首屏问题。完整说明、前置条件与原始验证记录在 [原项目](https://github.com/heart8858/daed-modify/blob/main/docs/INSTALL-10x4.md)（需要仓库权限）。
-
-若 raw 域名不可达，可在本仓库下载 `install.sh`，上传到目标机后运行 `sh /tmp/install.sh`。自动化可以使用 `--provider gitee|github --token-stdin`，或 `DAED_TOKEN_FILE`，避免将令牌写入命令参数。
-
-## 已有10x6.2：单独更新管理面板
+如需 LAN 直接访问面板（HTTP 明文，请先确认网络可信）：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/management-9.sh -o /tmp/daed-ui.sh && sh /tmp/daed-ui.sh
+uci set daed-console.main.listen='0.0.0.0:2024'
+uci commit daed-console
+/etc/init.d/daed-console restart
 ```
 
-management-9新增当前节点定位/强调、吸顶筛选与近几秒核心流量平均。仅接受固定10x6.2核心；不升级核心，不修改订阅、节点、DNS或网络，不应用待应用配置。安装程序与包从所选私有仓库获取并校验；先备份，失败自动回退。原install.sh及其10x4固定资产保留。
+## 验证范围
 
-## 定位修正版 management-10（已有10x6.2）
+离线包已在隔离的 QEMU OpenWrt 6.12.92 x86_64 VM 完成核心、管理台、登录和十页页面验收；公网入口额外要求私有仓库令牌。没有在真实生产路由器上执行本安装包；生产仍是 10x6.5 / management-12。未验证真实订阅、数据面、DNS 激活、LAN 接管和整机重启。
+
+## 历史固定入口
+
+### 10x4-install.1
+
+旧的 10x4 公网入口保留为单独文件，行为不变（选择来源、隐藏令牌输入）：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/management-10.sh -o /tmp/daed-ui.sh && sh /tmp/daed-ui.sh
+curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/10x4-install.1.sh -o /tmp/daed-10x4.sh && sh /tmp/daed-10x4.sh
 ```
 
-立即定位到吸顶栏下方，显示明确提示及高亮，后台延迟更新保留卡片。仍只更新管理组件，原install.sh、management-9.sh与历史资产保留。
+它固定安装 10x4，不随当前 `install.sh` 更新。
 
-## 节点观测 management-11（已有10x6.2）
+### 10x6.2 组件更新（历史）
 
-```sh
-curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/management-11.sh -o /tmp/daed-ui.sh && sh /tmp/daed-ui.sh
-```
+以下入口只更新固定 10x6.2 的管理组件，不升级核心，不修改订阅、节点、DNS 或网络：
 
-保留节点延迟历史，在卡片操作区下显示IP评分；独立组件通过各节点实际IPv4出口采样，成功结果12小时缓存，失败显示暂不可查并保留旧值。评分不参与路由和健康判定。重启后结果保留，下次有效登录打开节点页恢复后台采集。延迟历史保存在当前浏览器，清理浏览器存储会清除。
+- management-9：`management-9.sh`
+- management-10：`management-10.sh`
+- management-11：`management-11.sh`
 
-仅支持固定10x6.2；更新管理台与独立采集组件，不替换核心、不切换节点或应用待应用配置。两端私有发布附件均下载校验，安装失败自动回退。保留所有旧入口和资产。
+这些文件和历史资产保留，不作为当前 10x6.5 的安装入口。
