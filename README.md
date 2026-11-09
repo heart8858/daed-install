@@ -10,10 +10,10 @@ curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/install
 
 ## 当前固定版本
 
-- 核心：`10x6.5-install.1` / `custom-kern-takeover-10x6.5`
-- 管理台：`management-13`（console `d0c9ce62…`，observer `b52d73e2…`）
-- 离线包 SHA256：`30d1f73c6ce2dc8e7e99025545f8dd7e79686d50b79f487bc5580f7509889f85`
-- 大小：62,586,316 B；根分区需约 650 MB 可用空间
+- 核心：`10x6.6-install.1` / `custom-kern-takeover-10x6.6`
+- 管理台：`management-14`（console `dbfed47b…`，observer `b52d73e2…`）
+- 离线包 SHA256：`fc75a8e36a5b72a7bc2b5333de1d938f5570dcddbc58fffd40994c505d621487`
+- 大小：62,595,306 B；根分区需约 650 MB 可用空间
 
 启动器先校验归档 SHA256，再解压到 `/root` 并运行其中的离线安装器；安装器会再次校验包内 `SHA256SUMS`。核心和管理台分两阶段安装：先核心，后面板；任一阶段失败由安装器事务恢复，不会把归档内容直接覆盖到运行中的数据库。
 
@@ -49,7 +49,7 @@ uci commit daed-console
 
 ## 验证范围
 
-离线包已在隔离的 QEMU OpenWrt 6.12.92 x86_64 VM 完成核心、管理台、登录和十页页面验收；公网入口额外要求私有仓库令牌。Gitee 和 GitHub 两条公网下载与安装链均已实际执行：Gitee 路径完成安装、登录和十页验收，GitHub 路径完成安装、HTTP 检查和冷重启。没有在真实生产路由器上执行本安装包；生产仍是 10x6.5 / management-12。未验证真实订阅、数据面、DNS 激活和 LAN 接管。
+离线包已在克隆路由器 VM（OpenWrt 6.12.92 x86_64，BTF）完成安装：核心事务与面板事务均 committed，数据库按 upgrade 保留，core/console HTTP 200、routing 28027/26；公网入口额外要求私有仓库令牌。生产已是 10x6.6 / management-14，但本安装器未在真实生产路由器上执行。未验证全新空盘安装、真实订阅、数据面、DNS 激活和 LAN 接管。
 
 ## 历史固定入口
 
@@ -71,4 +71,4 @@ curl -fsSL https://raw.githubusercontent.com/heart8858/daed-install/main/10x4-in
 - management-10：`management-10.sh`
 - management-11：`management-11.sh`
 
-这些文件和历史资产保留，不作为当前 10x6.5 的安装入口。
+这些文件和历史资产保留，不作为当前 10x6.6 的安装入口。
