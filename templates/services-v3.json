@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "version": "services-3",
+  "source": "https://raw.githubusercontent.com/heart8858/daed-install/main/templates/services-v3.json",
+  "updated": "2026-11-10",
+  "services": [
+    {
+      "id": "im",
+      "name": "即时通讯",
+      "selectors": [
+        "domain(geosite:category-communication)",
+        "dip(geoip:telegram)"
+      ]
+    },
+    {
+      "id": "social",
+      "name": "社交媒体",
+      "selectors": [
+        "domain(geosite:category-social-media-!cn)",
+        "dip(geoip:twitter)",
+        "dip(geoip:facebook)"
+      ]
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "selectors": [
+        "domain(geosite:github)"
+      ]
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "selectors": [
+        "domain(geosite:openai)"
+      ]
+    },
+    {
+      "id": "ai",
+      "name": "AI 服务",
+      "selectors": [
+        "domain(geosite:category-ai-!cn)"
+      ]
+    },
+    {
+      "id": "tiktok",
+      "name": "TikTok",
+      "selectors": [
+        "domain(geosite:tiktok)"
+      ]
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "selectors": [
+        "domain(geosite:youtube)"
+      ]
+    },
+    {
+      "id": "netflix",
+      "name": "Netflix",
+      "selectors": [
+        "domain(geosite:netflix)",
+        "dip(geoip:netflix)"
+      ]
+    },
+    {
+      "id": "disney",
+      "name": "Disney+",
+      "selectors": [
+        "domain(geosite:disney)"
+      ]
+    },
+    {
+      "id": "hbo",
+      "name": "HBO",
+      "selectors": [
+        "domain(geosite:hbo)"
+      ]
+    },
+    {
+      "id": "primevideo",
+      "name": "PrimeVideo",
+      "selectors": [
+        "domain(geosite:primevideo)"
+      ]
+    },
+    {
+      "id": "appletv",
+      "name": "Apple TV+",
+      "selectors": [
+        "domain(geosite:apple-tvplus)"
+      ]
+    },
+    {
+      "id": "emby",
+      "name": "Emby",
+      "selectors": [
+        "domain(geosite:category-emby)"
+      ]
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "selectors": [
+        "domain(geosite:spotify)"
+      ]
+    },
+    {
+      "id": "bahamut",
+      "name": "Bahamut",
+      "selectors": [
+        "domain(geosite:bahamut)"
+      ]
+    },
+    {
+      "id": "hanime1",
+      "name": "Hanime1",
+      "selectors": [
+        "domain(hanime1.me)"
+      ]
+    },
+    {
+      "id": "media",
+      "name": "国外媒体",
+      "selectors": [
+        "domain(geosite:category-entertainment)"
+      ]
+    },
+    {
+      "id": "shop",
+      "name": "国外电商",
+      "selectors": [
+        "domain(geosite:category-ecommerce)"
+      ]
+    },
+    {
+      "id": "googlefcm",
+      "name": "谷歌 FCM",
+      "selectors": [
+        "domain(geosite:googlefcm)",
+        "domain(keyword:mtalk.google.com)",
+        "domain(suffix:fcm.googleapis.com)",
+        "domain(suffix:notifications-pa.googleapis.com)",
+        "domain(suffix:gcm-http.googleapis.com)"
+      ]
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "selectors": [
+        "domain(geosite:google)",
+        "dip(geoip:google)"
+      ]
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "selectors": [
+        "domain(geosite:apple)"
+      ]
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "selectors": [
+        "domain(geosite:microsoft)"
+      ]
+    },
+    {
+      "id": "game",
+      "name": "游戏平台",
+      "selectors": [
+        "domain(geosite:category-games)"
+      ]
+    },
+    {
+      "id": "steam",
+      "name": "Steam",
+      "selectors": [
+        "domain(geosite:steam)"
+      ]
+    },
+    {
+      "id": "speedtest",
+      "name": "测速工具",
+      "selectors": [
+        "domain(geosite:category-speedtest)"
+      ]
+    }
+  ]
+}
