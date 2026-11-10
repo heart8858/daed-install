@@ -5,7 +5,7 @@ set -eu
 umask 077
 PROVIDER=
 TOKEN_STDIN=0
-ARCHIVE_SHA='fc75a8e36a5b72a7bc2b5333de1d938f5570dcddbc58fffd40994c505d621487'
+ARCHIVE_SHA='a2efbfdda6b7999955e7007e4eb3a017368764927cfed56e0bf7549f5e24641a'
 while [ "$#" -gt 0 ]; do
  case "$1" in
   --provider) test "$#" -ge 2 || exit 2; PROVIDER=$2; shift 2 ;;
@@ -19,7 +19,7 @@ test "$(uname -m)" = x86_64 || { echo '仅支持 x86_64。' >&2; exit 1; }
 for TOOL in curl sha256sum tar mktemp awk df; do
  command -v "$TOOL" >/dev/null || { echo "缺少 $TOOL，请先安装匹配系统的工具。" >&2; exit 1; }
 done
-echo 'daed 10x6.6 + management-14 一键安装（离线包）'
+echo 'daed 10x6.7.1 + management-18 一键安装（离线包）'
 echo '新装后按提示读取初始账号；已有安装保留用户数据库，失败自动恢复。'
 FREE=$(df -Pk /root | awk 'NR==2 {print $4}')
 test "${FREE:-0}" -ge 640000 || {
@@ -33,8 +33,8 @@ if [ -z "$PROVIDER" ]; then
  case "$CHOICE" in ''|1) PROVIDER=gitee ;; 2) PROVIDER=github ;; *) echo '请选择 1 或 2。' >&2; exit 2 ;; esac
 fi
 case "$PROVIDER" in
- gitee) URL='https://gitee.com/api/v5/repos/meowchow/daed-modify/releases/1292165/attach_files/3646377/download' ;;
- github) URL='https://api.github.com/repos/heart8858/daed-modify/releases/assets/728493549' ;;
+ gitee) URL='https://gitee.com/api/v5/repos/meowchow/daed-modify/releases/1295605/attach_files/3656946/download' ;;
+ github) URL='https://api.github.com/repos/heart8858/daed-modify/releases/assets/732376988' ;;
  *) echo 'Invalid provider' >&2; exit 2 ;;
 esac
 WORK=$(mktemp -d /root/daed-oneclick.XXXXXX)
@@ -85,7 +85,7 @@ mkdir "$WORK/pkg"
 tar -xzf "$WORK/oneclick.tar.gz" -C "$WORK/pkg" || {
  echo '安装包展开失败，未执行。' >&2; exit 1;
 }
-for FILE in install.sh SHA256SUMS daed-install-core daed-10x6.6-install.1-x86_64.tar.gz daed-install-management daed-management-14-x86_64.tar.gz; do
+for FILE in install.sh SHA256SUMS daed-install-core daed-10x6.7.1-install.1-x86_64.tar.gz daed-install-management daed-management-18-x86_64.tar.gz; do
  test -f "$WORK/pkg/$FILE" || { echo "安装包不完整：缺少 $FILE。" >&2; exit 1; }
 done
 echo '校验通过，开始安装…'
